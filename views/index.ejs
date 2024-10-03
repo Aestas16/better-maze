@@ -1,0 +1,21 @@
+<% this.title = '首页'; %>
+<%- include('header') -%>
+<div id="all_description" class="ui grid">
+    <div class="row">
+      <div class="column">
+        <h3 class="ui top attached block header">走迷宫</h3>
+        <div class="ui bottom attached segment font-content"><div style="position: relative; overflow: hidden; ">
+            <p>你需要编写一个交互式走迷宫程序，具体如下：</p>
+            <ol>
+                <li>程序启动时，你应在<strong>标准输出流</strong>输出 <code>start</code>，来告知评测端你的程序已开始运行，此时评测端会发送 <code>ok</code> 至你程序的<strong>标准输入流</strong>；</li>
+                <li>在<strong>标准输出流</strong>输出 <code>info</code>，评测端会发送 <code>ok &lt;当前 x 坐标&gt; &lt;当前 y 坐标&gt; &lt;当前坐标上方状态&gt; &lt;当前坐标下方状态&gt; &lt;当前坐标左方状态&gt; &lt;当前坐标右方状态&gt;</code> 至你程序的<strong>标准输入流</strong>，其中坐标 $x,y$ 从 $1$ 开始编号，状态仅有 $0/1$ 两种，$0$ 表示可通行，$1$ 表示不可通行。特别地，我们定义坐标 $(x,y)$ 的上 / 下 / 左 / 右方坐标为 $(x-1,y)$，$(x+1,y)$，$(x,y-1)$，$(x,y+1)$；</li>
+                <li>在<strong>标准输出流</strong>输出 <code>target</code>，评测端会发送 <code>ok &lt;终点 x 坐标&gt; &lt;终点 y 坐标&gt;</code> 至你程序的<strong>标准输入流</strong>；</li>
+                <li>在<strong>标准输出流</strong>输出 <code>move 1/2/3/4</code>，分别表示你向上 / 下 / 左 / 右方移动，如果你移动后的坐标为终点坐标，服务器会发送 <code>success</code> 至你程序的<strong>标准输入流</strong>，反之会发送 <code>ok</code> 至你程序的<strong>标准输入流</strong>；</li>
+                <li>迷宫的地图大小为 $10 \times 10$，当你在地图边界使用 <code>info</code> 时，得到的地图外的坐标状态为 $1$；</li>
+                <li>如果你的 <code>move</code> 不合法（包括但不限于试图移动至状态为 $1$ 的坐标），评测将直接结束，你的该次评测不计入成绩。</li>
+            </ol>
+        </div></div>
+      </div>
+    </div>
+</div>
+<%- include('footer') -%>
