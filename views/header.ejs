@@ -13,6 +13,7 @@
     <link href="https://cdn.jsdelivr.net/npm/syzoj-public-cdn@1.2.0/google-fonts/lato.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/syzoj-public-cdn@1.2.0/google-fonts/open-sans.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/syzoj-public-cdn@1.2.0/google-fonts/exo-2.css" rel="stylesheet">
+    <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/syzoj-public-cdn@1.2.0/cdnjs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             showProcessingMessages: false,
@@ -38,23 +39,16 @@
             
             <div class="right menu">
                 <% if (user) { %>
-                <a href="https://www.luogu.com.cn/user/<%= user.luoguuid %>" style="color: inherit; " target="_blank">
-                    <div class="ui simple dropdown item">
-                        <span class="user-name" style="color: <%= user.color %> !important;"><%= user.username %></span>
-                        <i class="dropdown icon"></i>
-                        <div class="menu">
-                            <a class="item" href-post="/logout"><i class="power icon"></i>注销</a>
-                        </div>
+                <div class="ui simple dropdown item">
+                    <span style="font-weight: bold !important;"><%= user.username %></span><i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item" href-post="/logout"><i class="power icon"></i>注销</a>
                     </div>
-                </a>
+                </div>
                 <% } else { %>
                 <div class="item">
-                    <a class="ui button" style="margin-right: 0.5em; " href="/login">
-                        登录
-                    </a>
-                    <a class="ui primary button" href="/signup">
-                        注册
-                    </a>
+                    <a class="ui button" style="margin-right: 0.5em; " href="/login">登录</a>
+                    <a class="ui primary button" href="/signup">注册</a>
                 </div>
                 <% } %>
             </div>
