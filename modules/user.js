@@ -1,5 +1,20 @@
 let User = maze.model('user');
 
+app.get('/ranklist', async (req, res) => {
+    try {
+        let ranklist = await User.queryByOrder({ ['mazestep']: 'ASC' });
+    
+        res.render('ranklist', {
+            ranklist: ranklist
+        });
+    } catch (e) {
+        console.log(e);
+        res.render('error', {
+            err: e
+        });
+    }
+});
+
 app.get('/login', async (req, res) => {
     if (res.locals.user) {
         res.render('error', { err: '您已经登录了，请先注销。' });

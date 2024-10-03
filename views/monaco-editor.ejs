@@ -1,0 +1,18 @@
+<script>
+    window.pathLib = "https://cdn.jsdelivr.net/gh/Aestas16/syzoj-public-cdn@master//cdnjs/";
+    window.pathSelfLib = "https://cdn.jsdelivr.net/gh/Aestas16/syzoj-public-cdn@master//self/";
+    
+    var originalConsoleWarn = console.warn;
+    console.warn = function (message) {
+        if (message.startsWith('Duplicate definition of module')) return;
+        originalConsoleWarn.apply(console, arguments);
+    };
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/Aestas16/syzoj-public-cdn@master//cdnjs/monaco-editor/0.18.1/min/vs/loader.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Aestas16/syzoj-public-cdn@master//self/monaco-editor.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Aestas16/syzoj-public-cdn@master//self/monaco-editor.css">
+  
+<% this.showLoadingEditor = () => { %>
+<div class="ui active medium text loader">编辑器加载中 …</div>
+<% }; %>

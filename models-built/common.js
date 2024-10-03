@@ -29,12 +29,9 @@ class Model extends TypeORM.BaseEntity {
             return this;
         });
     }
-    static queryAll(where, order) {
+    static queryByOrder(order) {
         return __awaiter(this, void 0, void 0, function* () {
-            const queryBuilder = where instanceof TypeORM.SelectQueryBuilder ? where : this.createQueryBuilder().where(where);
-            if (order)
-                queryBuilder.orderBy(order);
-            return yield queryBuilder.getMany();
+            return yield this.createQueryBuilder().orderBy(order).getMany();
         });
     }
 }

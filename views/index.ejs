@@ -1,9 +1,10 @@
 <% this.title = '首页'; %>
 <%- include('header') -%>
+<%- include('monaco-editor') -%>
 <div id="all_description" class="ui grid">
     <div class="row">
       <div class="column">
-        <h3 class="ui top attached block header">走迷宫</h3>
+        <h3 class="ui top attached block header">迷程</h3>
         <div class="ui bottom attached segment font-content"><div style="position: relative; overflow: hidden; ">
             <p>你需要编写一个交互式走迷宫程序，具体如下：</p>
             <ol>
@@ -12,10 +13,59 @@
                 <li>在<strong>标准输出流</strong>输出 <code>target</code>，评测端会发送 <code>ok &lt;终点 x 坐标&gt; &lt;终点 y 坐标&gt;</code> 至你程序的<strong>标准输入流</strong>；</li>
                 <li>在<strong>标准输出流</strong>输出 <code>move 1/2/3/4</code>，分别表示你向上 / 下 / 左 / 右方移动，如果你移动后的坐标为终点坐标，服务器会发送 <code>success</code> 至你程序的<strong>标准输入流</strong>，反之会发送 <code>ok</code> 至你程序的<strong>标准输入流</strong>；</li>
                 <li>迷宫的地图大小为 $10 \times 10$，当你在地图边界使用 <code>info</code> 时，得到的地图外的坐标状态为 $1$；</li>
-                <li>如果你的 <code>move</code> 不合法（包括但不限于试图移动至状态为 $1$ 的坐标），评测将直接结束，你的该次评测不计入成绩。</li>
+                <li>如果你的 <code>move</code> 不合法（包括但不限于试图移动至状态为 $1$ 的坐标），评测将直接结束，你的该次评测不计入成绩；</li>
+                <li>若你的程序未能在 60s 内走出迷宫，评测将直接结束，你的该次评测不计入成绩。</li>
             </ol>
         </div></div>
       </div>
     </div>
+    <% if (user) { %>
+    <div class="row">
+        <div class="column">
+            <h3 class="ui top attached block header">提交代码（cpp）</h3>
+            <form action="/submit" method="post" onsubmit="return submit_code()" id="submit_code" enctype="multipart/form-data">
+                <input name="code" type="hidden">
+                <div class="ui grid">
+                    <div class="twelve wide stretched column" style="margin-right: -25px; height: 370px; overflow-x: hidden; position: relative; padding-left: 0; margin-left: calc(1rem - 1px); width: calc(95% + 1rem + 18px) !important; ">
+                        <div id="editor" style="position: absolute; width: 100%; height: calc(100% - 28px); border: 1px solid #D4D4D5; overflow: hidden; " class="editor" contenteditable>
+                            <div class="ui active medium text loader">编辑器加载中 …</div>
+                        </div>
+                    </div>
+                    <div class="ui form" style="width: 100%; ">
+                        <div class="inline fields" style="width: 100%; ">
+                            <div class="field" style="margin: 0 auto; ">
+                                <label for="answer">或者，上传代码文件</label>
+                                <input type="file" id="answer" name="answer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui center aligned vertical segment" style="padding-bottom: 0; ">
+                    <button type="submit" class="ui labeled icon button"><i class="ui edit icon"></i>提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <% } %>
 </div>
+<% if (user) { %>
+<script type="text/javascript">
+    var editor;
+    window.onEditorLoaded(function () {
+        var editorElement = document.getElementById('editor');
+        var content = '';
+        editor = window.createCodeEditor(editorElement, 'cpp', content);
+        window.editor = editor;
+    });
+  
+    var lastSubmitted = '';
+  
+    function submit_code() {
+        if (!$('#submit_code input[name=answer]').val().trim() && !editor.getValue().trim()) return false;
+        lastSubmitted = editor.getValue();
+        $('#submit_code input[name=code]').val(editor.getValue());
+        return true;
+    }
+</script>
+<% } %>
 <%- include('footer') -%>
