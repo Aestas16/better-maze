@@ -1,6 +1,6 @@
 let Submission = maze.model('submission');
 const bodyParser = require('body-parser');
-let Judger = require('./judger.js')
+let Judger = require('./judger/judger.js')
 let asyncLock = require('async-lock');
 let locks = new asyncLock();
 
@@ -17,7 +17,7 @@ function formatDate(time) {
 
 function formatStatus(status) {
     if (status === 'Accepted') return '<span class="status accepted"><i class="checkmark icon"></i> <b>Accepted</b></span>';
-    if (status === 'Invalid Movement') return '<span class="status wrong_answer"><i class="remove icon"></i> <b>Invalid Movement</b></span>';
+    if (status === 'Invalid Interaction') return '<span class="status wrong_answer"><i class="remove icon"></i> <b>Invalid Interaction</b></span>';
     if (status === 'Compile Error') return '<span class="status compile_error"><i class="code icon"></i> <b>Compile Error</b></span>';
     if (status === 'Runtime Error') return '<span class="status runtime_error"><i class="bomb icon"></i> <b>Runtime Error</b></span>';
     if (status === 'Waiting') return '<span class="status waiting"><i class="icon hourglass half"></i> <b>Waiting</b></span>';

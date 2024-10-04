@@ -9,7 +9,7 @@ enum Status {
   MEMORY_LIMIT_EXCEEDED = "Memory Limit Exceeded",
   RUNTIME_ERROR = "Runtime Error",
   TIME_LIMIT_EXCEEDED = "Time Limit Exceeded",
-  INVALID_MOVEMENT = "Invalid Movement",
+  INVALID_INTERACTION = "Invalid Interaction",
   WAITING = "Waiting",
   JUDGING = "Judging"
 }

@@ -28,7 +28,7 @@ var Status;
     Status["MEMORY_LIMIT_EXCEEDED"] = "Memory Limit Exceeded";
     Status["RUNTIME_ERROR"] = "Runtime Error";
     Status["TIME_LIMIT_EXCEEDED"] = "Time Limit Exceeded";
-    Status["INVALID_MOVEMENT"] = "Invalid Movement";
+    Status["INVALID_INTERACTION"] = "Invalid Interaction";
     Status["WAITING"] = "Waiting";
     Status["JUDGING"] = "Judging";
 })(Status || (Status = {}));
