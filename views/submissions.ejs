@@ -7,8 +7,8 @@
         <tbody>
             <% for (let submission of submissions) { %>
             <tr>
-                <td><a href="/submission/<%= submission.id %>"><b>#<%= submission.id %></b></a></td>
-                <td><a href="/submission/<%= submission.id %>"><%- submission.format_status %></a></td>
+                <td><b>#<%= submission.id %></b></td>
+                <td><%- submission.format_status %></td>
                 <td><%= submission.step %></td>
                 <td><%= submission.time %> ms</td>
                 <td><%= submission.memory %> K</td>
