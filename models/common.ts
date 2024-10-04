@@ -17,4 +17,10 @@ export default class Model extends TypeORM.BaseEntity {
     static async queryByOrder(order) {
         return await this.createQueryBuilder().orderBy(order).getMany();
     }
+
+    static async queryWhere(where, order) {
+        const queryBuilder = this.createQueryBuilder().where(where);
+        if (order) queryBuilder.orderBy(order);
+        return await queryBuilder.getMany();
+    }
 }

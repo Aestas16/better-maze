@@ -34,6 +34,14 @@ class Model extends TypeORM.BaseEntity {
             return yield this.createQueryBuilder().orderBy(order).getMany();
         });
     }
+    static queryWhere(where, order) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryBuilder = this.createQueryBuilder().where(where);
+            if (order)
+                queryBuilder.orderBy(order);
+            return yield queryBuilder.getMany();
+        });
+    }
 }
 exports.default = Model;
 //# sourceMappingURL=common.js.map

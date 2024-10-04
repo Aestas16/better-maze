@@ -1,0 +1,23 @@
+<% this.title = '提交记录'; %>
+<%- include('header') -%>
+<script src="https://cdn.jsdelivr.net/gh/Aestas16/syzoj-public-cdn@master//cdnjs/textfit/2.3.1/textFit.min.js"></script>
+<div class="padding">
+    <table id="vueAppFuckSafari" class="ui very basic center aligned table" style="white-space: nowrap;">
+        <thead><tr><th>编号</th> <th>状态</th> <th>使用步数</th> <th>总时间</th> <th>内存</th> <th>代码长度</th> <th>提交者</th> <th>提交时间</th></tr></thead>
+        <tbody>
+            <% for (let submission of submissions) { %>
+            <tr>
+                <td><a href="/submission/<%= submission.id %>"><b>#<%= submission.id %></b></a></td>
+                <td><a href="/submission/<%= submission.id %>"><%= submission.format_status %></a></td>
+                <td><%= submission.step %></td>
+                <td><%= submission.time %> ms</td>
+                <td><%= submission.memory %> K</td>
+                <td><%= submission.code_length %> B</td>
+                <td><span style="font-weight: bold !important;"><%= user.username %></span></td>
+                <td><%= submission.format_time %></td>
+            </tr>
+            <% } %>
+        </tbody></table>
+    <br>
+</div>
+<%- include('footer') -%>
