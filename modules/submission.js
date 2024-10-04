@@ -1,4 +1,6 @@
 let Submission = maze.model('submission');
+const bodyParser = require('body-parser');
+let Judger = require('./judger.js')
 let asyncLock = require('async-lock');
 let locks = new asyncLock();
 
@@ -46,19 +48,14 @@ app.get('/submissions', async (req, res) => {
     }
 });
 
-app.post('/submit', async (req, res) => {
+app.post('/submit', bodyParser.json(), async (req, res) => {
     try {
         if (!res.locals.user) throw '请登录后继续。';
     
         let code;
       
-        if (req.files['answer']) {
-            if (req.files['answer'][0].size > 102400) throw '代码文件太大。';
-            code = (await fs.readFile(req.files['answer'][0].path)).toString();
-        } else {
-            if (Buffer.from(req.body.code).length > 102400) throw '代码太长。';
-            code = req.body.code;
-        }
+        if (Buffer.from(req.body.code).length > 102400) throw '代码太长。';
+        code = req.body.code;
   
         let submission = await Submission.create({
             submit_time: parseInt((new Date()).getTime() / 1000),
@@ -69,7 +66,7 @@ app.post('/submit', async (req, res) => {
         });
         await submission.save();
 
-        await locks.acquire('submit', async () => { maze.judgequeue.push(submission); });
+        await locks.acquire('submit', async () => { await Judger.judge(submission); });
   
         res.redirect('/submissions');
     } catch (e) {

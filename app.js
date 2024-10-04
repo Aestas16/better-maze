@@ -95,11 +95,8 @@ global.maze = {
         await this.connect();
 
         var server = app.listen(8081, () => {
-            console.log("Listening on http://localhost:8081/");
+            console.log('Server is listening on port 8081.');
         });
-
-        // const Judger = require('./modules/judger.js');
-        // Judger.runjudger();
     },
     async connect() {
         global.TypeORM = TypeORM;
