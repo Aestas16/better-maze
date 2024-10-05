@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <sys/resource.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
@@ -20,7 +21,9 @@ void player() {
 }
 
 void judge(int i_sta, int p_sta) {
-    if (WIFEXITED(p_sta) || (WIFSIGNALED(p_sta) && WTERMSIG(p_sta) == SIGPIPE)) {
+    if (WTERMSIG(p_sta) == SIGXCPU) printf("Time Limit Exceeded");
+    else if (WTERMSIG(p_sta) == SIGSEGV) printf("Memory Limit Exceeded");
+    else if (WIFEXITED(p_sta) || (WIFSIGNALED(p_sta) && WTERMSIG(p_sta) == SIGPIPE)) {
         if (WIFEXITED(i_sta)) {
             if (WEXITSTATUS(i_sta) == 1) printf("Invalid Output\n");
             else if (WEXITSTATUS(i_sta) == 0) printf("Accepted\n");
@@ -33,6 +36,18 @@ void judge(int i_sta, int p_sta) {
 }
 
 int main() {
+    struct rlimit lim_time;
+    struct rlimit lim_mem;
+    struct rlimit lim_stack;
+
+    lim_time.rlim_cur = 11, lim_time.rlim_max = 15;
+    lim_mem.rlim_cur = 1024 * 1024 * (1024 + 128), lim_mem.rlim_max = 1024 * 1024 * (1024 + 512);
+    lim_stack.rlim_cur = 1024 * 1024 * (1024 + 128), lim_stack.rlim_max = 1024 * 1024 * (1024 + 512);
+
+    setrlimit(RLIMIT_CPU, &lim_time);
+    setrlimit(RLIMIT_AS, &lim_mem);
+    setrlimit(RLIMIT_STACK, &lim_stack);
+
     mkfifo("i2p", 0644), mkfifo("p2i", 0644);
 
     pid_t i_pid, p_pid;
