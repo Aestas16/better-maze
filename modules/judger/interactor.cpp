@@ -78,7 +78,7 @@ namespace Interactor {
                 if (curx == tx && cury == ty) {
                     FILE *f = fopen("result", "w");
                     fprintf(f, "%d\n", step);
-                    puts("success"), fflush(stdout), sleep(1), exit(0);
+                    puts("success"), fflush(stdout), exit(0);
                 } else puts("ok"), fflush(stdout);
             }
         }
