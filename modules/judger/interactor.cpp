@@ -33,8 +33,8 @@ namespace MazeGenerator {
         for (int i = 1; i <= N; i++) for (int j = 1; j <= M; j++) fa[id(i, j)] = id(i, j);
     }
     void print() {
-        for (int i = 1; i <= N; i++, puts(""))
-            for (int j = 1; j <= M; j++) printf("%d ", mp[i][j]);
+        for (int i = 1; i <= N; i++)
+            for (int j = 1; j <= M; j++) fprintf(stderr, "%d%c", mp[i][j], " \n"[j == M]);
     }
     void Generate() {
         for (int i = 1; i <= N; i += 2) for (int j = 1; j <= M; j += 2) edges.emplace_back(i, j, i + 2, j), edges.emplace_back(i, j, i, j + 2);
@@ -70,6 +70,7 @@ namespace Interactor {
                 int d;
                 if (scanf("%d", &d) != 1) exit(1);
                 if (d < 1 || d > 4) exit(1);
+                d--;
                 int x = curx + nx[d], y = cury + ny[d];
                 if (chk(x, y) == 0) exit(1);
                 if (mp[x][y]) exit(1);
@@ -77,8 +78,8 @@ namespace Interactor {
                 if (curx == tx && cury == ty) {
                     FILE *f = fopen("result", "w");
                     fprintf(f, "%d\n", step);
-                    puts("success"), fflush(stdout), exit(0);
-                } else puts("ok"), fflush(stdout), exit(1);
+                    puts("success"), fflush(stdout), sleep(1), exit(0);
+                } else puts("ok"), fflush(stdout);
             }
         }
     }
