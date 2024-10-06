@@ -1,12 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
-#include <ctime>
-#include <unistd.h>
 #include <signal.h>
-#include <fcntl.h>
-#include <sys/resource.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <sys/wait.h>
 
 void handler(int num)
@@ -29,6 +23,5 @@ int main() {
     }
 
     if (c_sta) printf("Compile Error\n");
-
     return c_sta;
 }
