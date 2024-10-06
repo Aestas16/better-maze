@@ -16,16 +16,29 @@ async function judge(submission, user) {
     }).then(() => {
         // console.log("run docker");
         return new Promise((resolve, reject) => {
-            exec('docker run -itd --name judge-sandbox sandbox /bin/bash', (err, stdout, stderr) => {
-                if (err) console.log(err);
+            exec('docker run -itd --name judge-sandbox sandbox /bin/bash', async (err, stdout, stderr) => {
+                if (err) {
+                    console.log(err);
+                    submission.status = 'Runtime Error';
+                    await submission.save();
+                    return ;
+                }
                 resolve();
             });
         });
     }).then(() => {
         // console.log("copy code");
         return new Promise((resolve, reject) => {
-            exec('docker cp player.cpp judge-sandbox:/sandbox', (err, stdout, stderr) => {
-                if (err) console.log(err);
+            exec('docker cp player.cpp judge-sandbox:/sandbox', async (err, stdout, stderr) => {
+                if (err) {
+                    console.log(err);
+                    submission.status = 'Runtime Error';
+                    await submission.save();
+                    exec('docker rm -f judge-sandbox', (err, stdout, stderr) => {
+                        if (err) console.log(err);
+                    });
+                    return ;
+                }
                 resolve();
             });
         });
@@ -49,7 +62,15 @@ async function judge(submission, user) {
         // console.log("run code");
         return new Promise((resolve, reject) => {
             exec('docker exec judge-sandbox ./judger', async (err, stdout, stderr) => {
-                if (err) console.log(err);
+                if (err) {
+                    console.log(err);
+                    submission.status = 'Runtime Error';
+                    await submission.save();
+                    exec('docker rm -f judge-sandbox', (err, stdout, stderr) => {
+                        if (err) console.log(err);
+                    });
+                    return ;
+                }
                 if (stdout) {
                     const result = JSON.parse(stdout);
                     // console.log(result);
