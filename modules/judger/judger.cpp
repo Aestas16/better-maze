@@ -1,4 +1,6 @@
 #include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
@@ -21,8 +23,8 @@ void player() {
 }
 
 void judge(int i_sta, int p_sta) {
-    if (WTERMSIG(p_sta) == SIGXCPU) printf("Time Limit Exceeded");
-    else if (WTERMSIG(p_sta) == SIGSEGV) printf("Memory Limit Exceeded");
+    if (WTERMSIG(p_sta) == SIGXCPU || WTERMSIG(p_sta) == SIGKILL) printf("Time Limit Exceeded\n");
+    else if (WTERMSIG(p_sta) == SIGSEGV) printf("Memory Limit Exceeded\n");
     else if (WIFEXITED(p_sta) || (WIFSIGNALED(p_sta) && WTERMSIG(p_sta) == SIGPIPE)) {
         if (WIFEXITED(i_sta)) {
             if (WEXITSTATUS(i_sta) == 1) printf("Invalid Output\n");
@@ -33,6 +35,11 @@ void judge(int i_sta, int p_sta) {
     } else {
         printf("Runtime Error\n");
     }
+}
+
+void handler(int num) {
+    printf("Time Limit Exceeded\n");
+    exit(0);
 }
 
 int main() {
@@ -51,13 +58,19 @@ int main() {
     mkfifo("i2p", 0644), mkfifo("p2i", 0644);
 
     pid_t i_pid, p_pid;
-    i_pid = fork();
-    if (i_pid == 0) return interactor(), 0;
-    p_pid = fork();
-    if (p_pid == 0) return player(), 0;
-
     int i_sta, p_sta;
-    waitpid(i_pid, &i_sta, 0), waitpid(p_pid, &p_sta, 0);
+    i_pid = fork();
+    if (i_pid == 0) interactor();
+    p_pid = fork();
+    if (p_pid == 0) {
+        player();
+    } else {
+        signal(SIGALRM, handler);
+        alarm(11);
+        waitpid(p_pid, &p_sta, 0);
+    }
+
+    waitpid(i_pid, &i_sta, 0);
     judge(i_sta, p_sta);
 
     unlink("i2p"), unlink("p2i");
