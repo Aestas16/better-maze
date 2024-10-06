@@ -66,7 +66,7 @@ app.post('/submit', bodyParser.json(), async (req, res) => {
         });
         await submission.save();
 
-        await locks.acquire('submit', async () => { await Judger.judge(submission); });
+        Judger.judge(submission, res.locals.user);
   
         res.redirect('/submissions');
     } catch (e) {

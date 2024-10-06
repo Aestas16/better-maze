@@ -13,6 +13,7 @@
 struct timeval start, end;
 struct rusage ru;
 pid_t i_pid, p_pid;
+bool ok;
 
 void interactor() {
     int in = open("p2i", O_RDONLY), out = open("i2p", O_WRONLY);
@@ -28,17 +29,17 @@ void player() {
 }
 
 void judge(int i_sta, int p_sta) {
-    if (WTERMSIG(p_sta) == SIGXCPU || WTERMSIG(p_sta) == SIGKILL) printf("Time Limit Exceeded\n");
-    else if (WTERMSIG(p_sta) == SIGSEGV) printf("Memory Limit Exceeded\n");
+    if (WTERMSIG(p_sta) == SIGXCPU || WTERMSIG(p_sta) == SIGKILL) printf("{ \"status\": \"Time Limit Exceeded\", ");
+    else if (WTERMSIG(p_sta) == SIGSEGV) printf("{ \"status\": \"Memory Limit Exceeded\", ");
     else if (WIFEXITED(p_sta) || (WIFSIGNALED(p_sta) && WTERMSIG(p_sta) == SIGPIPE)) {
         if (WIFEXITED(i_sta)) {
-            if (WEXITSTATUS(i_sta) == 1) printf("Invalid Output\n");
-            else if (WEXITSTATUS(i_sta) == 0) printf("Accepted\n");
+            if (WEXITSTATUS(i_sta) == 1) printf("{ \"status\": \"Invalid Output\", ");
+            else if (WEXITSTATUS(i_sta) == 0) ok = 1, printf("{ \"status\": \"Accepted\", ");
         } else if (WIFSIGNALED(i_sta) && WTERMSIG(i_sta) == SIGPIPE) {
-            printf("Invalid Output\n");
+            printf("{ \"status\": \"Invalid Output\", ");
         }
     } else {
-        printf("Runtime Error\n");
+        printf("{ \"status\": \"Runtime Error\", ");
     }
 }
 
@@ -80,7 +81,14 @@ int main() {
 
     int time_used = (int)(end.tv_sec * 1000 + end.tv_usec / 1000 - start.tv_sec * 1000 - start.tv_usec / 1000),
         memory_used = ru.ru_maxrss;
-    printf("%dms\n%dK\n", time_used, memory_used);
+    printf("\"time\": %d, \"memory\": %d", time_used, memory_used);
+
+    if (ok) {
+        FILE *f = fopen("result", "r");
+        int step;
+        fscanf(f, "%d", &step);
+        printf(", \"step\": %d }\n", step);
+    } else printf(" }\n");
 
     unlink("i2p"), unlink("p2i");
 
