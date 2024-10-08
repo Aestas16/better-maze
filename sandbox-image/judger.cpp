@@ -77,10 +77,16 @@ int main() {
     gettimeofday(&end, NULL);
 
     waitpid(i_pid, &i_sta, 0);
-    judge(i_sta, p_sta);
 
     int time_used = (int)(end.tv_sec * 1000 + end.tv_usec / 1000 - start.tv_sec * 1000 - start.tv_usec / 1000),
         memory_used = ru.ru_maxrss;
+
+    if (time_used > 10000) {
+        printf("{ \"status\": \"Time Limit Exceeded\", ");
+    } else if (memory_used > 1024 * 1024 * 1024) {
+        printf("{ \"status\": \"Memory Limit Exceeded\", ");
+    } else judge(i_sta, p_sta);
+
     printf("\"time\": %d, \"memory\": %d", time_used, memory_used);
 
     if (ok) {
