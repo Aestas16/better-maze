@@ -28,7 +28,7 @@ int main() {
     if (c_sta) {
         printf("Compile Error\n");
         FILE *f = fopen("compile", "r");
-        while (fgets(f, 100000, str)) {
+        while (fgets(str, 100000, f) != NULL) {
             // fputs(str, stderr);
             puts(str);
         }

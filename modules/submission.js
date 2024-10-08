@@ -1,7 +1,7 @@
 let Submission = maze.model('submission');
 const bodyParser = require('body-parser');
-let Judger = require('./judger/judger.js')
-let asyncLock = require('async-lock');
+const asyncLock = require('async-lock');
+let Judger = require('./judger');
 let locks = new asyncLock();
 
 function formatDate(time) {
@@ -20,6 +20,7 @@ function formatStatus(status) {
     if (status === 'Invalid Output') return '<span class="status wrong_answer"><i class="remove icon"></i> <b>Invalid Output</b></span>';
     if (status === 'Compile Error') return '<span class="status compile_error"><i class="code icon"></i> <b>Compile Error</b></span>';
     if (status === 'Runtime Error') return '<span class="status runtime_error"><i class="bomb icon"></i> <b>Runtime Error</b></span>';
+    if (status === 'System Error') return '<span class="status system_error"><i class="server icon"></i> <b>System Error</b></span>';
     if (status === 'Waiting') return '<span class="status waiting"><i class="icon hourglass half"></i> <b>Waiting</b></span>';
     if (status === 'Judging') return '<span class="status judging"><i class="icon spinner"></i> <b>Judging</b></span>';
     if (status === 'Memory Limit Exceeded') return '<span class="status memory_limit_exceeded"><i class="microchip icon"></i> <b>Memory Limit Exceeded</b></span>';
@@ -92,7 +93,9 @@ app.post('/submit', bodyParser.json(), async (req, res) => {
         });
         await submission.save();
 
-        Judger.judge(submission, res.locals.user);
+        locks.acquire('judge', async () => {
+            await Judger.judge(submission, res.locals.user);
+        });
   
         res.redirect('/submissions');
     } catch (e) {

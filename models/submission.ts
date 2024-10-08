@@ -8,6 +8,7 @@ enum Status {
   COMPILE_ERROR = "Compile Error",
   MEMORY_LIMIT_EXCEEDED = "Memory Limit Exceeded",
   RUNTIME_ERROR = "Runtime Error",
+  SYSTEM_ERROR = "System Error",
   TIME_LIMIT_EXCEEDED = "Time Limit Exceeded",
   INVALID_OUTPUT = "Invalid Output",
   WAITING = "Waiting",

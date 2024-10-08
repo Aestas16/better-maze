@@ -91,4 +91,4 @@ app.post('/api/sign_up', async (req, res) => {
       console.log(e);
       res.send({ err: e });
     }
-  });
+});
