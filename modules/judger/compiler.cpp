@@ -4,6 +4,8 @@
 #include <signal.h>
 #include <sys/wait.h>
 
+char str[100000];
+
 void handler(int num)
 {
     printf("Compile Error\n");
@@ -23,6 +25,13 @@ int main() {
         waitpid(c_pid, &c_sta, 0);
     }
 
-    if (c_sta) printf("Compile Error\n");
+    if (c_sta) {
+        printf("Compile Error\n");
+        FILE *f = fopen("compile", "r");
+        while (fgets(f, 100000, str)) {
+            // fputs(str, stderr);
+            puts(str);
+        }
+    }
     return c_sta;
 }
