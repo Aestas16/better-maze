@@ -35,6 +35,32 @@ app.get('/submissions', async (req, res) => {
         for (let submission of submissions) {
             submission.format_time = formatDate(submission.submit_time);
             submission.format_status = formatStatus(submission.status);
+            await submission.loadRelationships();
+        }
+
+        res.render('submissions', {
+            submissions: submissions
+        });
+    } catch (e) {
+        console.log(e);
+        res.render('error', {
+          err: e
+        });
+    }
+});
+
+app.get('/submissions/all', async (req, res) => {
+    try {
+        if (!res.locals.user) throw '请登录后继续。';
+
+        if (res.locals.user.id !== 1) throw '无权限访问。';
+
+        let submissions = await Submission.queryByOrder({ id: 'DESC' });
+
+        for (let submission of submissions) {
+            submission.format_time = formatDate(submission.submit_time);
+            submission.format_status = formatStatus(submission.status);
+            await submission.loadRelationships();
         }
 
         res.render('submissions', {
