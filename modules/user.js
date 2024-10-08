@@ -62,6 +62,9 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/sign_up', async (req, res) => {
     try {
         res.setHeader('Content-Type', 'application/json');
+
+        if (req.body.username.length === 0) throw "用户名不允许为空。";
+
         let user = await User.findByName(req.body.username);
         if (user) throw "用户名已存在。";
 
